@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "largepoolmining"
+  },
+  "targets": {
+    "largepoolmining": {
+      "hosting": {
+        "lpm-admin-app": [
+          "lpm-admin-app"
+        ]
+      }
+    }
+  }
+}
