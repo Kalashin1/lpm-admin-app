@@ -44,6 +44,11 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
+            <Link to={`/chats`} className="block p-2 py-4 text-gray-100">
+              Chats
+            </Link>
+          </li>
+          <li>
             <Link to="/invested-users" className="block p-2 py-4 text-gray-100">
               Invested Users
             </Link>
