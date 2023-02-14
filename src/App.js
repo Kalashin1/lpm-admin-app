@@ -7,6 +7,7 @@ import Investments from './pages/Investments'
 import Investment from './pages/Investment'
 import InvestmentForm from './pages/Create-Investments'
 import UpdateMining from './pages/UpdateMining';
+import Chats from './pages/Chats';
 
 function App() {
   return (
@@ -38,6 +39,9 @@ function App() {
         </Route>
         <Route path="/update-mining/:id">
           <UpdateMining />
+        </Route>
+        <Route path="/chats">
+          <Chats />
         </Route>
       </Switch>
     </Router>
