@@ -8,6 +8,7 @@ import Investment from './pages/Investment'
 import InvestmentForm from './pages/Create-Investments'
 import UpdateMining from './pages/UpdateMining';
 import Chats from './pages/Chats';
+import Chat from './pages/Chat';
 
 function App() {
   return (
@@ -42,6 +43,9 @@ function App() {
         </Route>
         <Route path="/chats">
           <Chats />
+        </Route>
+        <Route path="/chat/:id">
+          <Chat />
         </Route>
       </Switch>
     </Router>

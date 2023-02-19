@@ -8,13 +8,13 @@ import { useEffect } from "react";
 import { db } from '../firebase-settings';
 import { getDocs, doc, onSnapshot, query, collection, where, orderBy, updateDoc } from 'firebase/firestore'
 
-const ChatComponent = () => {
+const ChatComponent = ({ showSidebar = true, user_name, showMessage = true }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState();
   const [user, setUser] = useState()
   
-  const getChats = async () => {
+  const getChats = async (name) => {
     const q = query(collection(db, "chats"), orderBy('createdAt', 'desc'))
     const querySnapshot = await getDocs(q);
     const arr = []
@@ -23,8 +23,8 @@ const ChatComponent = () => {
         arr.push({...d.data(), id: d.id })
       }
     })
-    setUser(await getUserMessages(arr[0].user_name));
-    await getMessages(arr[0])
+    setUser(await getUserMessages(name ?? arr[0].user_name));
+    await getMessages(arr.find(user => user.user_name === name) ?? arr[0])
     return arr;
   }
   const getUserMessages = async (name) => {
@@ -94,18 +94,19 @@ const ChatComponent = () => {
   }
 
   useEffect(() => {
-    getChats().then(d => setUsers(d))
-  }, [])
+    getChats(user_name).then(d => setUsers(d))
+  }, [user_name])
 
   return (
     <div class="flex h-screen antialiased text-gray-800">
       <div class="flex flex-col lg:flex-row h-full w-full overflow-x-hidden">
-        <SidebarChat setUser={updateMessages} users={users?.map(a => a.user_name)} />
-        <div class="flex flex-col flex-auto h-full p-6">
-          <div class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full overflow-y-scroll p-4">
-            <div class="flex flex-col h-full overflow-x-auto mb-4">
-              <div class="flex flex-col h-full">
-                <div class="grid grid-cols-12 overflow-y-scroll gap-y-2">
+        { showSidebar && (<SidebarChat setUser={updateMessages} users={users?.map(a => a.user_name)} />) }
+        {showMessage && (<div class="flex flex-col flex-auto h-2/3 p-6">
+          <div class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-4/6 md:h-full
+           overflow-y-hidden p-4">
+            <div class="flex flex-col h-full pt-16 overflow-x-auto overflow-y-hidden mb-4">
+              <div class="flex flex-col overflow-y-hidden h-full">
+                <div class="grid grid-cols-12 h-4/5 md:h-full overflow-y-scroll">
                   {user && messages && messages.map((m) => (
                     <>
                     { m.sender === "user" ? (<Receiver message={m.message} name={m.name} />): (<Sender message={m.message} />)}
@@ -114,16 +115,16 @@ const ChatComponent = () => {
                 </div>
               </div>
             </div>
-            <div class="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
-              <div class="flex-grow ml-4">
+            <div class="flex flex-row items-center rounded-xl w-80 md:w-4/5 fixed bottom-6 left-4">
+              <div class="flex-grow">
                 <div class="relative w-full">
-                  <input
-                    type="text"
+                  <textarea
                     value={message}
+                    row={2}
                     onChange={e => setMessage(e.target.value)}
-                    class="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
-                  />
-                  <button class="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
+                    class="flex w-72 md:w-full border-2 border-gray-600 p-4 bg-transparent rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10 md:h-32"
+                  ></textarea>
+                  <button class="absolute flex px-2 py-2 items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
                     {" "}
                   </button>
                 </div>
@@ -131,7 +132,7 @@ const ChatComponent = () => {
               <SendButton handleSubmit={ e => handleSubmit(message, user.user_name)} />
             </div>
           </div>
-        </div>
+        </div>)}
       </div>
     </div>
   );

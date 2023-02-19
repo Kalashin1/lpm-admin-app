@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link } from 'react-router-dom';
-
+const Logo = '/lpm.png';
 export default function Navbar() {
   let [toggleNav, setToggleNav] = useState(true);
 
   return (
-    <header className="grid w-full grid-cols-1 bg-purple-600 content-center items-center">
+    <header className="grid w-full grid-cols-1 bg-purple-600 content-center items-center z-20">
       <nav className="bg-white shadow-md grid grid-cols- py-3 justify-between align-middle">
-        <div className="relative md:top-4 grid col-sapn-1 text-xl font-bold p-1 pl-2">
-          <img alt="large pool mining" src="/lpm.png" className="w-16 h-8 object-fit" />
+        <div className="relative md:top-4 grid col-span-1 text-xl font-bold p-1 pl-2">
+          <img alt="large pool mining" src={Logo} className="w-16 h-8 object-fit" />
         </div>
         <ul className="relative -top-4 my-auto sm:grid hidden sm:col-span-2 sm:grid-cols-3 p-1 justify-self-end self-center">
           <li className="px-2 hover:text-purple-600">
@@ -39,7 +39,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link to={`/Create Investment`} className="block p-2 py-4 text-gray-100">
+            <Link onClick={() => setToggleNav(!toggleNav)} to={`/Create Investment`} className="block p-2 py-4 text-gray-100">
               Create Investment
             </Link>
           </li>
