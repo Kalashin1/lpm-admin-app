@@ -53,6 +53,11 @@ export default function Navbar() {
               Invested Users
             </Link>
           </li>
+	<li>
+            <Link to="/chats" className="block p-2 py-4 text-gray-100">
+              Chats
+            </Link>
+          </li>
           <li>
             <a href="/" className="block p-2 py-4 text-gray-100">
               Logout
